@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menadżer haseł</title>
+</head>
+
+<body>
+  <h1>Zaloguj się:</h1>
+  <hr>
+  <form id="form">
+    <label>
+      Login:
+      <input type="text" id="username" />
+    </label>
+    <p></p>
+    <label >
+      Hasło:
+      <input type="password" id="password" />
+    </label>
+
+    <button id="submit">Zaloguj się</button>
+  </form>
+  <script>
+    let
+      attempts = 5,
+      logins = new Map([
+        ['root', 'root'],
+        ['admin', 'admin']
+      ]);
+    formElement = document.getElementById('form');
+
+    function disableForm() {
+      const
+        usernameInput = document.getElementById('username'),
+        passwordInput = document.getElementById('password'),
+        submitButton = document.getElementById('submit');
+      usernameInput.setAttribute('disabled', 'disabled');
+      passwordInput.setAttribute('disabled', 'disabled');
+      submitButton.setAttribute('disabled', 'disabled');
+    }
+
+    function decreaseAttemptsLeft() {
+      attempts--;
+      if (attempts === 0) {
+        disableForm();
+        alert('Nie udało Ci się zalogować. Spróbuj ponownie później');
+      } else {
+        const
+          message = `masz jeszcze ${attempts} prób`;
+        alert(message);
+      }
+    }
+
+    function onFormSubmit(event) {
+      event.preventDefault();
+
+      const
+        usernameInput = document.getElementById('username'),
+        passwordInput = document.getElementById('password');
+
+      if (
+        !logins.has(usernameInput.value) ||
+        logins.get(usernameInput.value) !== passwordInput.value
+      ) {
+        decreaseAttemptsLeft();
+        return;
+      }
+
+      alert('Udało się zalogować');
+      window.location.href = 'dodanehasla.html'
+      attempts = 5;
+    }
+    form.addEventListener('submit', onFormSubmit);
+  </script>
+</body>
+</html>

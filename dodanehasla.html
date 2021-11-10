@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menadżer Haseł</title>
+</head>
+
+<body onload="init()">
+    <h1>Witaj <span id="username"></span>dodane  hasła:</h1>
+    <div id="taskList">
+
+    </div>
+    <h2>Dodaj nowe hasło:</h2>
+    <input type="text" name="" id="task">
+    <button onclick="addTask()">Dodaj hasło</button>
+    <script>
+        function addTask() {
+            let task = document.getElementById('task').value;
+            let taskList = JSON.parse(window.localStorage.getItem('taskList'));
+            try {
+                taskList.push(task);
+            } catch {
+                taskList = Array();
+                taskList.push(task); 
+            }
+            
+
+            window.localStorage.setItem('taskList', JSON.stringify(taskList));
+            document.getElementById('task').value = "";
+            showTaskList();
+        }
+        function showTaskList() {
+            let taskArray = JSON.parse(window.localStorage.getItem('taskList'));
+            if(taskArray === null) return;
+            let taskList = document.getElementById('taskList');
+            let htmlBuffer = "";
+            htmlBuffer += "<ul>";
+            for (let i = 0; i < taskArray.length; i++) {
+                htmlBuffer += "<li><button onclick=\"removeTask("+i+")\">Usuń</button>" 
+                                + taskArray[i] + "</li>";
+            }
+            htmlBuffer += "</ul>";
+            taskList.innerHTML = htmlBuffer;
+        }
+        function removeTask(i) {
+            let taskArray = JSON.parse(window.localStorage.getItem('taskList'));
+            console.log(taskArray);
+            taskArray.splice(i, 1);
+            console.log(taskArray);
+
+            window.localStorage.setItem('taskList', JSON.stringify(taskArray));
+            showTaskList();
+        }
+    </script>
+</body>
+</html>
